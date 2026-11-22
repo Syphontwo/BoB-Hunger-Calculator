@@ -1,6 +1,8 @@
 # BoB-Hunger-Calculator
 A dependency-free, single-page calculator that estimates elapsed time to four food-level milestones in Beasts of Bermuda, given a dinosaur-specific multiplier (M), growth (G), and current food remaining (H). Calculations run locally in the browser; no game connection, backend, cookies, telemetry, accounts, or external libraries are required.
 
+Data is provisional, approximate, and under active improvement. This is not authoritative.
+
 ## Quick start
 
 - Open `index.html` directly in a modern browser; it also works offline.
