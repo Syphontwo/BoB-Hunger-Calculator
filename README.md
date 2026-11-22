@@ -3,6 +3,8 @@ A dependency-free, single-page calculator that estimates elapsed time to four fo
 
 Data is provisional, approximate, and under active improvement. This is not authoritative.
 
+**[Launch the Hunger Calculator](https://syphontwo.github.io/BoB-Hunger-Calculator/)**
+
 ## Quick start
 
 - Open `index.html` directly in a modern browser; it also works offline.
