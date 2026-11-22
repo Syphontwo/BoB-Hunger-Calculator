@@ -108,7 +108,7 @@ These are observations from controlled in-game tests. The exact sequence of inte
 
 ## Preset catalog and status
 
-These are **research estimates or assumed values**, not 28 independently validated implementations of the complete formula. Names mirror the research workbook; they are short labels, not necessarily the game's full taxonomic names. The user may override `M` manually at any time.
+These are **research estimates values** and are in no way in-game engine values.
 
 | Dinosaur / form | M | Dinosaur / form | M |
 | --- | ---: | --- | ---: |
