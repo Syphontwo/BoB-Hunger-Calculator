@@ -13,7 +13,7 @@ Data is provisional, approximate, and under active improvement. This is not auth
 - Read the predicted **tick counts**, **times**, and **food-over-time plot**. Use **Copy results** for a plain-text record.
 - After deploying, **Copy shareable link** creates a URL with the selected inputs.
 
-The site is currently one file (`index.html`) with embedded HTML, CSS, JavaScript, and SVG. Included `preview.png` and `preview-mobile.png` are reference screenshots, not dependencies.
+The site is currently one file (`index.html`) with embedded HTML, CSS, JavaScript, and SVG.
 
 ## Mathematical model
 
