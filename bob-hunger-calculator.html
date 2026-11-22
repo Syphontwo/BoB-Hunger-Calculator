@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102326">
+  <meta name="description" content="Beasts of Bermuda hunger milestone calculator based on experimental food drain measurements.">
+  <title>Beasts of Bermuda · Hunger Calculator</title>
+  <style>
+    :root{color-scheme:light;--ink:#16262b;--muted:#576b71;--border:#dae4df;--surface:#fff;--page:#f3f6f3;--deep:#102b30;--teal:#177e74;--soft:#eaf5f0;--green:#2f8776;--amber:#ba7938;--orange:#cb5a37;--red:#b64350;--focus:#179b91;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+    *{box-sizing:border-box}body{margin:0;background:var(--page);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);line-height:1.5}
+    .topbar{background:var(--deep);color:#f4fbf7}.wrap{width:min(1110px,calc(100% - 40px));margin-inline:auto}
+    .topbar .wrap{padding:28px 0 32px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#b1d3c6;margin:0 0 8px}
+    h1{font-size:clamp(26px,4vw,39px);line-height:1.15;letter-spacing:-.045em;margin:0 0 7px}header p{margin:0;color:#c5d8d1;font-size:14px;max-width:720px}
+    main{padding:24px 0 34px}.layout{display:grid;grid-template-columns:minmax(270px,330px) 1fr;align-items:start;gap:20px}.panel{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:0 5px 22px rgba(18,42,36,.035)}
+    .panel-inner{padding:23px}.panel-heading{font-size:17px;letter-spacing:-.02em;margin:0 0 5px}.intro{font-size:12.5px;color:var(--muted);margin:0 0 20px}
+    .field{margin-bottom:17px}.field label{display:block;font-size:13px;font-weight:750;margin:0 0 6px}.field small{display:block;color:var(--muted);font-size:11px;margin:6px 0 0}
+    select,input{width:100%;font:inherit;font-size:16px;min-height:43px;background:#fff;border:1px solid #bccfc8;border-radius:9px;padding:9px 12px;color:var(--ink)}
+    select:focus-visible,input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #6dbab0;outline-offset:2px}input:invalid{border-color:var(--red)}
+    .inline{display:grid;grid-template-columns:1fr 1fr;gap:12px}.inline .field{margin-bottom:0}.muted{color:var(--muted)}
+    .hint{padding:12px 13px;border-radius:9px;background:#f6f8f5;border:1px solid #e1e8e0;font-size:12px;color:var(--muted);margin-top:19px}
+    .hint strong{color:var(--ink)}.field-hint{border-left:3px solid var(--amber);padding-left:10px;font-size:12px;color:#78522f;margin:12px 0 0;display:none}
+    .output-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 0 14px}.output-head h2{font-size:18px;margin:0;letter-spacing:-.025em}.pill{font-size:11px;font-weight:700;white-space:nowrap;background:#e8f4ef;color:#236c5e;border-radius:99px;padding:5px 9px}
+    .hero{background:var(--deep);color:white;border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+    .hero-label{font-size:12px;color:#bad3ce;font-weight:650}.hero-time{font-size:clamp(30px,5vw,44px);font-family:var(--mono);font-weight:750;letter-spacing:-.07em;line-height:1.2;margin-top:5px;font-variant-numeric:tabular-nums}.hero-detail{font-size:12px;color:#cfddd7}
+    .milestones{display:grid;grid-template-columns:1fr 1fr;gap:11px}.milestone{border:1px solid var(--border);border-radius:11px;padding:13px;position:relative;overflow:hidden}.milestone::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--mark)}
+    .milestone .name{font-weight:720;font-size:12.5px}.milestone .condition{font-size:11px;color:var(--muted)}.milestone .time{font:750 23px/1.3 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.06em;margin-top:9px}.milestone .ticks{font-size:11px;color:var(--muted)}
+    .chart-section{padding-top:19px}.chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}.chart-head h3{margin:0;font-size:15px}.chart-head span{font-size:11px;color:var(--muted)}
+    #curve{width:100%;height:auto;display:block;overflow:visible}.chart-key{display:flex;flex-wrap:wrap;gap:10px 17px;font-size:11px;color:var(--muted);margin:2px 0 0}.key-dot{display:inline-block;width:9px;height:9px;border-radius:9px;margin-right:6px}
+    .action-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid #b9cec6;background:#fff;color:var(--ink);padding:10px 14px;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer}.btn-primary{background:var(--teal);border-color:var(--teal);color:white}.btn:hover{filter:brightness(.97)}.btn:disabled{opacity:.5;cursor:not-allowed}.notice{font-size:12px;color:#8a4f26;background:#fff8eb;border:1px solid #f0dec1;padding:11px 13px;border-radius:9px;margin-top:14px;display:none}
+    .details{margin-top:20px}.details summary{font-size:14px;font-weight:750;cursor:pointer;padding:3px 0}.details p{font-size:12px;color:var(--muted);margin:10px 0}.formula{font:12px/1.65 var(--mono);background:#f4f8f5;padding:11px 12px;border-radius:8px;overflow-wrap:anywhere;color:#163d39}
+    .bottom{font-size:12px;color:var(--muted);padding:0 0 30px}.bottom p{margin:0}.bottom a{color:#176d66}
+    @media (max-width:780px){.layout{grid-template-columns:1fr}.topbar .wrap{padding:23px 0}.panel-inner{padding:18px}}
+    @media (max-width:430px){.wrap{width:min(100% - 24px,1110px)}.milestones{grid-template-columns:1fr 1fr;gap:8px}.milestone{padding:11px}.milestone .time{font-size:20px}.inline{gap:9px}.hero{padding:14px}}
+    body.embed{background:transparent}body.embed .topbar,body.embed .bottom,body.embed .details,body.embed .share-only{display:none}body.embed main{padding:0}body.embed .wrap{width:100%}body.embed .layout{gap:12px}body.embed .panel-inner{padding:17px}body.embed .panel{box-shadow:none}
+    @media print{.topbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}.panel{box-shadow:none}.action-row{display:none}}
+  </style>
+</head>
+<body>
+<header class="topbar"><div class="wrap"><div class="eyebrow">Experimental model</div><h1>Beasts of Bermuda <span style="color:#89d4bc">Hunger Calculator</span></h1><p>Estimate how many hunger ticks remain before growth slowdown, drain falloff, starvation status, and health damage.</p></div></header>
+<main class="wrap">
+<div class="layout">
+<section class="panel" aria-labelledby="settings-title"><div class="panel-inner">
+  <h2 class="panel-heading" id="settings-title">Dinosaur & starting stats</h2>
+  <p class="intro">Choose a multiplier or enter your own.</p>
+  <div class="field"><label for="dino">Dinosaur</label><select id="dino"></select><small>Presets (calculated in <a href="https://docs.google.com/spreadsheets/d/13PnO1ziA9xUgqEugiZcK97yFO6MtfuQSh6r0lkZbdfU/edit?usp=sharing">this workbook</a> ).</small></div>
+  <div class="field"><label for="modifier">Hunger multiplier (M)</label><input id="modifier" type="number" min="0.0001" step="any" value="1.88" inputmode="decimal"><small>Editable even when a dinosaur is selected.</small></div>
+  <div class="inline">
+    <div class="field"><label for="growth">Growth (G)</label><input id="growth" type="number" min="0.01" step="any" value="4" inputmode="decimal"></div>
+    <div class="field"><label for="food">Food remaining (%)</label><input id="food" type="number" min="0" max="100" step="any" value="100" inputmode="decimal"></div>
+  </div>
+  <div id="species-note" class="field-hint" role="status"></div>
+  <div class="hint"><strong>Simulation assumptions</strong><br>At or above 35% food, drain uses actual growth. After a tick takes food <em>below</em> 35%, the next tick uses effective growth <strong>1.32</strong>. Each tick takes <strong>15 seconds</strong>; no other modifiers are applied (comfort, blessings, water, etc.).</div>
+  <div class="notice" id="range-note" role="status"></div>
+</div></section>
+<section class="panel" aria-labelledby="results-title"><div class="panel-inner">
+  <div class="output-head"><h2 id="results-title">Time to hunger milestones</h2><span class="pill">Predictions · not observed</span></div>
+  <div class="hero"><div><div class="hero-label">Until health damage (&lt;10% food)</div><div class="hero-time" id="hero-time">—</div><div class="hero-detail" id="hero-detail">Food percentage threshold, not actual death</div></div><svg viewBox="0 0 48 48" width="45" height="45" aria-hidden="true" style="flex-shrink:0;opacity:.8"><path d="M24 5 6 40h36L24 5Z" fill="none" stroke="#93dbca" stroke-width="3" stroke-linejoin="round"/><path d="M24 17v12" stroke="#93dbca" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="35" r="2" fill="#93dbca"/></svg></div>
+  <div class="milestones" id="milestones">
+    <div class="milestone" style="--mark:#2f8776"><div class="name">Growth slowdown</div><div class="condition">Below 50% food</div><div class="time" id="time50">—</div><div class="ticks" id="ticks50">—</div></div>
+    <div class="milestone" style="--mark:#be864b"><div class="name">Drain falloff</div><div class="condition">Below 35% food</div><div class="time" id="time35">—</div><div class="ticks" id="ticks35">—</div></div>
+    <div class="milestone" style="--mark:#cf7441"><div class="name">Starving status</div><div class="condition">At or below 15% food</div><div class="time" id="time15">—</div><div class="ticks" id="ticks15">—</div></div>
+    <div class="milestone" style="--mark:#b64350"><div class="name">Health damage</div><div class="condition">Below 10% food</div><div class="time" id="time10">—</div><div class="ticks" id="ticks10">—</div></div>
+  </div>
+  <div class="chart-section"><div class="chart-head"><h3>Predicted food over time</h3><span>Start → below 10%</span></div><svg id="curve" viewBox="0 0 640 210" role="img" aria-label="Predicted food remaining over time chart"><text x="24" y="100">Enter valid inputs to draw the model</text></svg>
+  <div class="chart-key"><span><i class="key-dot" style="background:var(--green)"></i>50%</span><span><i class="key-dot" style="background:var(--amber)"></i>35%</span><span><i class="key-dot" style="background:var(--orange)"></i>15%</span><span><i class="key-dot" style="background:var(--red)"></i>10%</span></div></div>
+  <div class="action-row"><button type="button" class="btn btn-primary" id="copy-results">Copy results</button><button type="button" class="btn share-only" id="copy-link">Copy shareable link</button><button type="button" class="btn" id="reset">Reset</button></div>
+</div></section>
+</div>
+<details class="panel details"><summary class="panel-inner">Model, assumptions & limitations</summary><div class="panel-inner" style="padding-top:0">
+  <div class="formula">Drain = (M × G_effective − 1) × (0.25 + 0.75 × Food_fraction)</div>
+  <p>Food_fraction is remaining food expressed as a number between 0 and 1 (even for Rex). On each 15-second tick, the current food percentage determines the drain; food is then reduced by that amount. Only after food falls <strong>below</strong> 35% does effective growth used inthe calculations change to 1.32. The calculator uses the precise unrounded simulated food value throughout.</p>
+  <p>The 50% marker is associated with growth slowdown with growth levels above 1.32. The 15% starving indicator was observed consistently across the detailed curves regardless of growth; health damage begins below 10%. This tool <strong>does not predict the time of death</strong>.</p>
+  <p>The combined equation and low-food growth clamp are experimental hypotheses generated by observation, <em>not</em> confirmed source code. Best-supported growth measurements are above 1.32. Juvenile behavior and special hunger capacities or species abilities may differ. Results may vary due to game-side rounding, mechanics, and environment.</p>
+</div></details>
+</main>
+<footer class="wrap bottom"><p>Unofficial tool · No game assets or external libraries · Works offline · <a href="https://www.reddit.com/r/BeastsofBermuda/" rel="noreferrer" target="_blank">Beasts of Bermuda Reddit</a></p></footer>
+<script>
+"use strict";
+const PRESETS = [{"name":"Bronto","m":1.53},{"name":"Apato","m":0.99},{"name":"Lurdo","m":1.88},{"name":"Ory","m":2.45},{"name":"Pachy","m":2.32},{"name":"Para","m":2.32},{"name":"Sai","m":1.76},{"name":"Coah","m":1.54},{"name":"Carch","m":1.26},{"name":"Arco","m":1.38},{"name":"Icthy","m":1.88},{"name":"Wieh","m":1.58},{"name":"Rex","m":1.06,"note":"Source notes unusual 150/150 food behavior; extra testing needed."},{"name":"Utah","m":1.88},{"name":"Velo","m":1.88},{"name":"Changy","m":1.88},{"name":"Zupay","m":1.88},{"name":"Megarat","m":1.79},{"name":"Kapra","m":1.35,"note":"Source notes a possible special modifier; extra testing needed."},{"name":"PT","m":2.14},{"name":"Trope","m":2.05},{"name":"Elas","m":1.79},{"name":"Krono","m":1.06,"note":"Source notes unusually low multiplier; extra testing needed."},{"name":"Mosa","m":1.08},{"name":"Arch","m":1.88},{"name":"Palae (aqua)","m":1.35},{"name":"Palae (semi)","m":1.52},{"name":"Palae (terra)","m":1.52}];
+const modelTickSeconds = 15;
+const thresholds = [{key:"50",value:50,strict:true},{key:"35",value:35,strict:true},{key:"15",value:15,strict:false},{key:"10",value:10,strict:true}];
+const els = Object.fromEntries(["dino","modifier","growth","food","species-note","range-note","hero-time","hero-detail","copy-results","copy-link","reset","curve"].map(id=>[id,document.getElementById(id)]));
+const numberFormat = n => Number.isFinite(n)?n.toLocaleString("en-US",{maximumFractionDigits:3}):"—";
+function timeLabel(n){if(n===null)return "Not reached";if(n===0)return "Now";const s=n*modelTickSeconds;const hh=Math.floor(s/3600), mm=Math.floor(s%3600/60), ss=s%60;return hh?`${hh}h ${String(mm).padStart(2,"0")}m ${String(ss).padStart(2,"0")}s`:`${mm}m ${String(ss).padStart(2,"0")}s`;}
+function currentInput(){return {m:Number(els.modifier.value),g:Number(els.growth.value),food:Number(els.food.value),name:els.dino.value};}
+function calculate({m,g,food}, cap=100000){
+ const valid=Number.isFinite(m)&&m>0&&Number.isFinite(g)&&g>0&&Number.isFinite(food)&&food>=0&&food<=100;
+ if(!valid)return {error:"Enter a positive M and G, and food remaining from 0 to 100%."};
+ if([els.modifier,els.growth,els.food].some(x=>x.value.trim()===""))return {error:"All three numeric fields are required."};
+ const hits={};const points=[{tick:0,food}];let remaining=food;
+ const reached=(level)=> level.strict?remaining<level.value:remaining<=level.value;
+ for(const level of thresholds)if(reached(level))hits[level.key]=0;
+ for(let tick=1;tick<=cap&&Object.keys(hits).length<4;tick++){
+   const eff=remaining<35?1.32:g;
+   const a=m*eff-1;
+   if(!(a>0))break;
+   const d=a*(0.25+0.0075*remaining);
+   if(!(d>0))break;
+   remaining=Math.max(0,remaining-d);
+   points.push({tick,food:remaining});
+   for(const level of thresholds)if(hits[level.key]===undefined&&reached(level))hits[level.key]=tick;
+ }
+ return {hits,points,initial:aAt(m,g,food),endFood:remaining};
+}
+function aAt(m,g,food){return (m*(food<35?1.32:g)-1)*(0.25+0.0075*food);}
+function createSvg(tag,attrs={}){const e=document.createElementNS("http://www.w3.org/2000/svg",tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));return e;}
+function drawCurve(result,starting){const svg=els.curve;svg.replaceChildren();if(!result||result.error){svg.append(createSvg("text",{x:20,y:110,fill:"#61736d"})).textContent="Enter valid inputs to see the hunger curve";return;}
+ const left=42,right=619,top=15,bottom=174,width=right-left,height=bottom-top;const points=result.points;const maxTicks=Math.max(1,points[points.length-1].tick);const endTick=result.hits["10"]??maxTicks;
+ const x=n=>left+width*n/maxTicks;const y=p=>bottom-height*p/100;
+ for(const v of [100,75,50,35,15,10,0]){
+   const label=createSvg("text",{x:left-10,y:y(v)+4,fill:"#698078","font-size":11,"text-anchor":"end"});label.textContent=String(v);svg.append(label);
+   svg.append(createSvg("line",{x1:left,x2:right,y1:y(v),y2:y(v),stroke:v===35?"#c69c65":v===10?"#ca7e85":"#e7eee8","stroke-width":v===35||v===10?1.4:1,"stroke-dasharray":v===35||v===10?"5 4":"none"}));
+ }
+ if(points.length>1){const path=createSvg("polyline",{points:points.map(p=>`${x(p.tick).toFixed(2)},${y(p.food).toFixed(2)}`).join(" "),fill:"none",stroke:"#177e74","stroke-width":3.2,"stroke-linejoin":"round","stroke-linecap":"round"});svg.append(path);}
+ else svg.append(createSvg("circle",{cx:x(0),cy:y(starting),r:4,fill:"#177e74"}));
+ const ranges=[0,Math.round(maxTicks/2),maxTicks].filter((v,i,arr)=>arr.indexOf(v)===i);for(const t of ranges){const label=createSvg("text",{x:x(t),y:bottom+19,fill:"#667b73","font-size":11,"text-anchor":t===0?"start":t===maxTicks?"end":"middle"});label.textContent=(t*15/60).toLocaleString("en-US",{maximumFractionDigits:1})+" min";svg.append(label);}
+ for(const [k,color] of [["50","#2f8776"],["35","#ba7938"],["15","#cb5a37"],["10","#b64350"]]){const t=result.hits[k];if(t===undefined||t===0)continue;const p=points.find(z=>z.tick===t);if(!p)continue;svg.append(createSvg("circle",{cx:x(t),cy:y(p.food),r:4.6,fill:color,stroke:"#fff","stroke-width":2}));}
+ const axis=createSvg("text",{x:right,y:207,"font-size":11,"text-anchor":"end",fill:"#667b73"});axis.textContent="Elapsed time";svg.append(axis);
+}
+let lastResult=null;
+function update(){const {m,g,food,name}=currentInput();const r=calculate({m,g,food});lastResult=r;
+ const selected=PRESETS.find(v=>v.name===name);const warnings=[];
+ if(selected&&selected.note)warnings.push(selected.note);
+ els["species-note"].style.display=warnings.length?"block":"none";els["species-note"].textContent=warnings.join(" ");
+ let warn="";if(!r.error){if(g<1.32||g>10)warn="Growth outside expected range. Results are extrapolations.";if(food<35)warn+=(warn?" ":"")+"Starting below 35%: the low-growth clamp applies immediately.";}
+ els["range-note"].style.display=warn||r.error?"block":"none";els["range-note"].textContent=r.error||warn;
+ for(const k of ["50","35","15","10"]){const n=r.error?null:(r.hits[k]??null);document.getElementById("time"+k).textContent=timeLabel(n);document.getElementById("ticks"+k).textContent=n===null?"No crossing under model":`${n} tick${n===1?"":"s"} · ${numberFormat(n*15/60)} min`;}
+ const n=r.error?null:(r.hits["10"]??null);els["hero-time"].textContent=timeLabel(n);els["hero-detail"].textContent=r.error?r.error:n===null?"Not reachable with current model settings":`${n} ticks · Health damage threshold, not time of death`;
+ els["copy-results"].disabled=!!r.error;drawCurve(r,food);
+}
+function shareLink(){const q=new URLSearchParams({d:els.dino.value,m:els.modifier.value,g:els.growth.value,h:els.food.value});return location.origin+location.pathname+"?"+q.toString();}
+function getResultsText(){const {m,g,food,name}=currentInput();return ["Beasts of Bermuda — Hunger Calculator",`Species: ${name}`,`M: ${m} | Growth: ${g} | Food: ${food}%`,`Model: D=(M*G_eff-1)*(0.25+0.75H); 15s/tick`,`At food <35%, G_eff=1.32 (starting next tick).`,"",...[["50","Growth slowdown (<50%)"],["35","Drain falloff (<35%)"],["15","Starving status (<=15%)"],["10","Health damage (<10%)"]].map(([k,t])=>`${t}: ${timeLabel(lastResult?.hits?.[k]??null)} (${lastResult?.hits?.[k]??"not reached"} ticks)`),"","Predicted only; not a measured death timer."].join("\n");}
+function copyText(txt,button){const before=button.textContent;function done(){button.textContent="Copied!";setTimeout(()=>{button.textContent=before},1300)}if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(done,()=>window.prompt("Copy this text:",txt));}else window.prompt("Copy this text:",txt);}
+const params=new URLSearchParams(location.search);
+const sorted=[...PRESETS].sort((a,b)=>a.name.localeCompare(b.name));
+for(const d of sorted){const opt=document.createElement("option");opt.value=d.name;opt.textContent=`${d.name} · M ${d.m.toFixed(2)}`;els.dino.append(opt);}
+const custom=document.createElement("option");custom.value="Custom";custom.textContent="Custom multiplier";els.dino.append(custom);
+const requested=params.get("d");els.dino.value=requested&&[...els.dino.options].some(o=>o.value===requested)?requested:"Zupay";
+const first=PRESETS.find(x=>x.name===els.dino.value);els.modifier.value=params.has("m")?params.get("m"):first?first.m:1.88;
+if(params.has("g"))els.growth.value=params.get("g");if(params.has("h"))els.food.value=params.get("h");
+els.dino.addEventListener("change",()=>{const item=PRESETS.find(x=>x.name===els.dino.value);if(item)els.modifier.value=item.m;update()});
+for(const id of ["modifier","growth","food"])els[id].addEventListener("input",update);
+els["copy-results"].addEventListener("click",()=>copyText(getResultsText(),els["copy-results"]));
+els["copy-link"].addEventListener("click",()=>copyText(shareLink(),els["copy-link"]));
+els.reset.addEventListener("click",()=>{els.dino.value="Zupay";els.modifier.value="1.88";els.growth.value="4";els.food.value="100";update()});
+if(location.protocol==="file:"){els["copy-link"].disabled=true;els["copy-link"].title="Shareable links work after you publish the site";}
+if(params.get("embed")==="1")document.body.classList.add("embed");
+update();
+</script>
+</body>
+</html>
