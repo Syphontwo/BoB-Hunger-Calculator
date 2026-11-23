@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#102326">
-  <meta name="description" content="Beasts of Bermuda hunger milestone calculator based on experimental food drain measurements.">
-  <title>Beasts of Bermuda · Hunger Calculator</title>
+  <meta name="description" content="Beasts of Bermuda hunger milestone calculator based on experimental food drain measurements in Gauntlet Mode.">
+  <title>Beasts of Bermuda · Gauntlet Mode Hunger Calculator</title>
   <style>
     :root{color-scheme:light;--ink:#16262b;--muted:#576b71;--border:#dae4df;--surface:#fff;--page:#f3f6f3;--deep:#102b30;--teal:#177e74;--soft:#eaf5f0;--green:#2f8776;--amber:#ba7938;--orange:#cb5a37;--red:#b64350;--focus:#179b91;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
     *{box-sizing:border-box}body{margin:0;background:var(--page);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);line-height:1.5}
@@ -37,7 +37,7 @@
   </style>
 </head>
 <body>
-<header class="topbar"><div class="wrap"><div class="eyebrow">Experimental model</div><h1>Beasts of Bermuda <span style="color:#89d4bc">Hunger Calculator</span></h1><p>Estimate how many hunger ticks remain before growth slowdown, drain falloff, starvation status, and health damage.</p></div></header>
+<header class="topbar"><div class="wrap"><div class="eyebrow">Experimental model</div><h1>Beasts of Bermuda <span style="color:#89d4bc">Gauntlet Mode Hunger Calculator</span></h1><p>Estimate how many hunger ticks remain before growth slowdown, stat reduction, drain falloff, starvation status, and health damage.</p></div></header>
 <main class="wrap">
 <div class="layout">
 <section class="panel" aria-labelledby="settings-title"><div class="panel-inner">
@@ -47,30 +47,31 @@
   <div class="field"><label for="modifier">Hunger multiplier (M)</label><input id="modifier" type="number" min="0.0001" step="any" value="1.88" inputmode="decimal"><small>Editable even when a dinosaur is selected.</small></div>
   <div class="inline">
     <div class="field"><label for="growth">Growth (G)</label><input id="growth" type="number" min="0.01" step="any" value="4" inputmode="decimal"></div>
-    <div class="field"><label for="food">Food remaining (%)</label><input id="food" type="number" min="0" max="100" step="any" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="capacity">Food Capacity (F)</label><input id="capacity" type="number" min="1" step="1" value="100" inputmode="decimal"></div>
+    <div class="field"><label for="food">Food remaining (exact)</label><input id="food" type="number" min="0" max="999" step="1" value="100" inputmode="decimal"></div>
   </div>
   <div id="species-note" class="field-hint" role="status"></div>
-  <div class="hint"><strong>Simulation assumptions</strong><br>At or above 35% food, drain uses actual growth. After a tick takes food <em>below</em> 35%, the next tick uses effective growth <strong>1.32</strong>. Each tick takes <strong>15 seconds</strong>; no other modifiers are applied (comfort, blessings, water, etc.).</div>
+  <div class="hint"><strong>Simulation assumptions</strong><br>At or above 35 food, drain uses actual growth. After a tick takes food <em>below</em> 35, the next tick uses effective growth <strong>1.32</strong>. Each tick takes <strong>15 seconds</strong>; no other modifiers are applied (comfort, rest, blessings, water, etc.).  Assumed to be standing still the whole time.</div>
   <div class="notice" id="range-note" role="status"></div>
 </div></section>
 <section class="panel" aria-labelledby="results-title"><div class="panel-inner">
   <div class="output-head"><h2 id="results-title">Time to hunger milestones</h2><span class="pill">Predictions · not observed</span></div>
-  <div class="hero"><div><div class="hero-label">Until health damage (&lt;10% food)</div><div class="hero-time" id="hero-time">—</div><div class="hero-detail" id="hero-detail">Food percentage threshold, not actual death</div></div><svg viewBox="0 0 48 48" width="45" height="45" aria-hidden="true" style="flex-shrink:0;opacity:.8"><path d="M24 5 6 40h36L24 5Z" fill="none" stroke="#93dbca" stroke-width="3" stroke-linejoin="round"/><path d="M24 17v12" stroke="#93dbca" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="35" r="2" fill="#93dbca"/></svg></div>
+  <div class="hero"><div><div class="hero-label">Until health damage (&lt;10 food)</div><div class="hero-time" id="hero-time">—</div><div class="hero-detail" id="hero-detail">Food threshold, not actual death</div></div><svg viewBox="0 0 48 48" width="45" height="45" aria-hidden="true" style="flex-shrink:0;opacity:.8"><path d="M24 5 6 40h36L24 5Z" fill="none" stroke="#93dbca" stroke-width="3" stroke-linejoin="round"/><path d="M24 17v12" stroke="#93dbca" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="35" r="2" fill="#93dbca"/></svg></div>
   <div class="milestones" id="milestones">
-    <div class="milestone" style="--mark:#2f8776"><div class="name">Growth slowdown</div><div class="condition">Below 50% food</div><div class="time" id="time50">—</div><div class="ticks" id="ticks50">—</div></div>
-    <div class="milestone" style="--mark:#be864b"><div class="name">Drain falloff</div><div class="condition">Below 35% food</div><div class="time" id="time35">—</div><div class="ticks" id="ticks35">—</div></div>
-    <div class="milestone" style="--mark:#cf7441"><div class="name">Starving status</div><div class="condition">At or below 15% food</div><div class="time" id="time15">—</div><div class="ticks" id="ticks15">—</div></div>
-    <div class="milestone" style="--mark:#b64350"><div class="name">Health damage</div><div class="condition">Below 10% food</div><div class="time" id="time10">—</div><div class="ticks" id="ticks10">—</div></div>
+    <div class="milestone" style="--mark:#2f8776"><div class="name">Growth slowdown</div><div class="condition">Below 50 food</div><div class="time" id="time50">—</div><div class="ticks" id="ticks50">—</div></div>
+    <div class="milestone" style="--mark:#be864b"><div class="name">Drain falloff</div><div class="condition">Below 35 food</div><div class="time" id="time35">—</div><div class="ticks" id="ticks35">—</div></div>
+    <div class="milestone" style="--mark:#cf7441"><div class="name">Starving status</div><div class="condition">At or below 15 food</div><div class="time" id="time15">—</div><div class="ticks" id="ticks15">—</div></div>
+    <div class="milestone" style="--mark:#b64350"><div class="name">Health damage</div><div class="condition">Below 10 food</div><div class="time" id="time10">—</div><div class="ticks" id="ticks10">—</div></div>
   </div>
-  <div class="chart-section"><div class="chart-head"><h3>Predicted food over time</h3><span>Start → below 10%</span></div><svg id="curve" viewBox="0 0 640 210" role="img" aria-label="Predicted food remaining over time chart"><text x="24" y="100">Enter valid inputs to draw the model</text></svg>
-  <div class="chart-key"><span><i class="key-dot" style="background:var(--green)"></i>50%</span><span><i class="key-dot" style="background:var(--amber)"></i>35%</span><span><i class="key-dot" style="background:var(--orange)"></i>15%</span><span><i class="key-dot" style="background:var(--red)"></i>10%</span></div></div>
+  <div class="chart-section"><div class="chart-head"><h3>Predicted food over time</h3><span>Start → below 10</span></div><svg id="curve" viewBox="0 0 640 210" role="img" aria-label="Predicted food remaining over time chart"><text x="24" y="100">Enter valid inputs to draw the model</text></svg>
+  <div class="chart-key"><span><i class="key-dot" style="background:var(--green)"></i>50</span><span><i class="key-dot" style="background:var(--amber)"></i>35</span><span><i class="key-dot" style="background:var(--orange)"></i>15</span><span><i class="key-dot" style="background:var(--red)"></i>10</span></div></div>
   <div class="action-row"><button type="button" class="btn btn-primary" id="copy-results">Copy results</button><button type="button" class="btn share-only" id="copy-link">Copy shareable link</button><button type="button" class="btn" id="reset">Reset</button></div>
 </div></section>
 </div>
 <details class="panel details"><summary class="panel-inner">Model, assumptions & limitations</summary><div class="panel-inner" style="padding-top:0">
   <div class="formula">Drain = (M × G_effective − 1) × (0.25 + 0.75 × Food_fraction)</div>
-  <p>Food_fraction is remaining food expressed as a number between 0 and 1 (even for Rex). On each 15-second tick, the current food percentage determines the drain; food is then reduced by that amount. Only after food falls <strong>below</strong> 35% does effective growth used inthe calculations change to 1.32. The calculator uses the precise unrounded simulated food value throughout.</p>
-  <p>The 50% marker is associated with growth slowdown with growth levels above 1.32. The 15% starving indicator was observed consistently across the detailed curves regardless of growth; health damage begins below 10%. This tool <strong>does not predict the time of death</strong>.</p>
+  <p>Food_fraction is remaining food expressed as a number between 0 and 1 (regardless of capacity). On each 15-second tick, the current food percentage determines the drain; food is then reduced by that amount. Only after food falls <strong>below</strong> 35 does effective growth used in the calculations change to 1.32. The calculator uses the precise unrounded simulated food value throughout.</p>
+  <p>The 50 marker is associated with growth slowdown with growth levels above 1.32. The 15 starving indicator was observed consistently across the detailed curves regardless of growth; health damage begins below 10. This tool <strong>does not predict the time of death</strong>.</p>
   <p>The combined equation and low-food growth clamp are experimental hypotheses generated by observation, <em>not</em> confirmed source code. Best-supported growth measurements are above 1.32. Juvenile behavior and special hunger capacities or species abilities may differ. Results may vary due to game-side rounding, mechanics, and environment.</p>
 </div></details>
 </main>
@@ -130,7 +131,7 @@ function update(){const {m,g,food,name}=currentInput();const r=calculate({m,g,fo
  els["copy-results"].disabled=!!r.error;drawCurve(r,food);
 }
 function shareLink(){const q=new URLSearchParams({d:els.dino.value,m:els.modifier.value,g:els.growth.value,h:els.food.value});return location.origin+location.pathname+"?"+q.toString();}
-function getResultsText(){const {m,g,food,name}=currentInput();return ["Beasts of Bermuda — Hunger Calculator",`Species: ${name}`,`M: ${m} | Growth: ${g} | Food: ${food}%`,`Model: D=(M*G_eff-1)*(0.25+0.75H); 15s/tick`,`At food <35%, G_eff=1.32 (starting next tick).`,"",...[["50","Growth slowdown (<50%)"],["35","Drain falloff (<35%)"],["15","Starving status (<=15%)"],["10","Health damage (<10%)"]].map(([k,t])=>`${t}: ${timeLabel(lastResult?.hits?.[k]??null)} (${lastResult?.hits?.[k]??"not reached"} ticks)`),"","Predicted only; not a measured death timer."].join("\n");}
+function getResultsText(){const {m,g,food,name}=currentInput();return ["Beasts of Bermuda — Hunger Calculator",`Species: ${name}`,`M: ${m} | Growth: ${g} | Food: ${food}`,`Model: D=(M*G_eff-1)*(0.25+0.75H); 15s/tick`,`At food <35, G_eff=1.32 (starting next tick).`,"",...[["50","Growth slowdown (<50)"],["35","Drain falloff (<35)"],["15","Starving status (<=15)"],["10","Health damage (<10)"]].map(([k,t])=>`${t}: ${timeLabel(lastResult?.hits?.[k]??null)} (${lastResult?.hits?.[k]??"not reached"} ticks)`),"","Predicted only; not a measured death timer."].join("\n");}
 function copyText(txt,button){const before=button.textContent;function done(){button.textContent="Copied!";setTimeout(()=>{button.textContent=before},1300)}if(navigator.clipboard?.writeText){navigator.clipboard.writeText(txt).then(done,()=>window.prompt("Copy this text:",txt));}else window.prompt("Copy this text:",txt);}
 const params=new URLSearchParams(location.search);
 const sorted=[...PRESETS].sort((a,b)=>a.name.localeCompare(b.name));
