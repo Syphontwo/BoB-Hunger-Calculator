@@ -151,6 +151,6 @@ These are **research estimates values** and are in no way in-game engine values.
 
 ## Attribution and status
 
-*Beasts of Bermuda* is the game studied; this calculator is an **unofficial** community resource and not endorsed by the game's developers. Raw experiments and hypothesis development were provided by me. No game code, internal engine calculations, or developer confirmation was used to derive the calculator or collect any data points. Research and formulas may change with new observations or game updates.
+*Beasts of Bermuda* is the game studied; this calculator is an **unofficial** community resource and not endorsed by the game's developers. Raw experiments and hypothesis development were provided by STOIN (see above) and myself. No game code, internal engine calculations, or developer confirmation was used to derive the calculator or collect any data points. Research and formulas may change with new observations or game updates.
 
 **License:** Unlicense as listed in the repository.
