@@ -106,6 +106,15 @@ These are observations from controlled in-game tests. The exact sequence of inte
 - **Not every species fits a universal `-1` intercept exactly.** The Apato growth 10 100% food observation was `8.7` resulting in `M=0.97`. Apatosaurus growth-4 was `3.2`, whereas predicting the drain using `M=0.97` it should have been `2.88`.  This is a bit too far from what would be acceptable as rounding errors and is one of the data points that reinforces there is more to the hunger drain than being accounted for.  Other expected species to have issues are Kapro due to it's `Lazy` trait, Rex due to having hunger above 100, and Krono due to having a surprisingly low `M` value calculated.
 - **Health damage and death are not modeled.** Health damage was observed to have a sharp curve highly dependent on growth and hunger, as well as potentially many other unaccounted for variables. Due to this, the only `death percentages` noted were for Zupay at a few different growths through letting it starve to death all the way from 10% and simply the percentage it was at on death. Damage started small, then grew as it got worse.
 
+### Previous Community Data Collection
+
+I have been pointed to some incredible data collection performed by community member STOIN made for the benefit of [TITANHEIMR](https://steamcommunity.com/linkfilter/?u=https%3A%2F%2Fsites.google.com%2Fview%2Ftitanheimr%2Fbeastsofbermuda%3Fauthuser%3D1).  They are linked below for reference.
+
+- [Metabolism stats](https://steamcommunity.com/sharedfiles/filedetails/?id=3726215599)
+- [Playable stats](https://steamcommunity.com/sharedfiles/filedetails/?id=3806449927)
+
+These numbers and derived formulas are different than those proposed here but are still quite close in their estimations and accuracy.  The information presented in these findings will be incorporated in to this repository and are considered invaluable additions from the community.  Huge thank you to STOIN and any others who helped in this collection.
+
 ## Preset catalog and status
 
 These are **research estimates values** and are in no way in-game engine values.
@@ -132,10 +141,12 @@ These are **research estimates values** and are in no way in-game engine values.
 ## Replication, corrections, and next experiments
 
 **High Priority Followups**
-1. Resolve species specific discrepancies for Apato, Kapro, and Rex. This is expected to new variables to account for species specific modifiers as the model here is not representative of the full game system.
-2. Spot check all species at various growth and hunger levels to establish a level of variance under the currently established test conditions. Acceptable variance is currently considered `± 0.1` between the calculated and observed drain.
-3. Establish a full curve for other *typical* species in addition to the Zupay curve
-4. Establish a full curve for all *atypical* species such as kapro
+
+1. Add new thresholds for stat drain and growth pause to the calculator.
+2. Change calculations to use direct hunger values, i.e. 50 and 35, instead of percentages.
+3. Add stomach capacity to dinosaur stats and add customization for that stat when making your own custom curve.
+4. Add a metabolic multiplier for bonuses to be applied.
+5. Add notes that this calculator is specifically for Gauntlet Mode.
 
 ## Attribution and status
 
