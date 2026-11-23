@@ -142,11 +142,12 @@ These are **research estimates values** and are in no way in-game engine values.
 
 **High Priority Followups**
 
-1. Add new thresholds for stat drain and growth pause to the calculator.
-2. Change calculations to use direct hunger values, i.e. 50 and 35, instead of percentages.
-3. Add stomach capacity to dinosaur stats and add customization for that stat when making your own custom curve.
+1. ~~Add new thresholds for stat drain and growth pause to the calculator.~~
+2. ~~Change calculations to use direct hunger values, i.e. 50 and 35, instead of percentages.~~
+3. ~~Add stomach capacity to dinosaur stats and add customization for that stat when making your own custom curve.~~
 4. Add a metabolic multiplier for bonuses to be applied.
-5. Add notes that this calculator is specifically for Gauntlet Mode.
+5. ~~Add notes that this calculator is specifically for Gauntlet Mode.~~
+6. Confirm new model accuracy and refinements.
 
 ## Attribution and status
 
